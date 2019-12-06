@@ -8,26 +8,30 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.edf.sitecp.bddtests.constants.BddTestsConstants;
 
 import lombok.Getter;
+import lombok.Setter;
 
 @Getter
+@Setter
 public class BasePage {
 
 	@FindBys(
 		@FindBy(css=BddTestsConstants.DATA_TNR_ATTRIBUTE_CSS_SELECTOR)
 	)
 	private Map<String,WebElement> elements; 
-	
 	private String pageUrl;
-	
-	public WebDriver webDriver;
+	private WebDriver webDriver;
+	private FieldDecorator decorator;
 	
 	public BasePage(WebDriver webDriver) {
 		this.webDriver = webDriver;
-		PageFactory.initElements(new BddTestFieldDecorator(new DefaultElementLocatorFactory(webDriver)), this);
+		this.decorator = new BddTestFieldDecorator(new DefaultElementLocatorFactory(webDriver));
+		PageFactory.initElements(decorator, this);
 	}
 	
 	public void open(String url) {
