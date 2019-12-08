@@ -1,6 +1,5 @@
 package com.edf.sitecp.bddtests.pageobjects;
 
-import java.awt.List;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -20,7 +19,7 @@ public class BddTestFieldDecorator extends DefaultFieldDecorator {
 	 @Override
 	 public Object decorate(ClassLoader loader, Field field) {
 		 if(!(WebElement.class.isAssignableFrom(field.getType()) 
-				 || isDecoratableList(field))) {
+				 || isDecoratableList(field) || Map.class.isAssignableFrom(field.getType()) )) {
 			 return null;
 		 }
 		 
@@ -28,7 +27,7 @@ public class BddTestFieldDecorator extends DefaultFieldDecorator {
 		 
 		 if(WebElement.class.isAssignableFrom(field.getType())) {
 			 return proxyForListLocator(loader, locator);
-		 } else if(List.class.isAssignableFrom(field.getType())) {
+		 } else if(Map.class.isAssignableFrom(field.getType())) {
 			 return customProxyForListLocator(loader, locator);
 		 } else {
 			 return null;

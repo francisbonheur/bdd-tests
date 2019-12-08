@@ -29,7 +29,7 @@ public class BddTestsListToMapInvocationHandler implements InvocationHandler {
 			mapElements.put(element.getAttribute(BddTestsConstants.DATA_TNR_ATTRIBUTE), element);
 		}
 		
-		return method.invoke(mapElements, proxy);
+		return method.invoke(mapElements, args);
 	}
 
 }

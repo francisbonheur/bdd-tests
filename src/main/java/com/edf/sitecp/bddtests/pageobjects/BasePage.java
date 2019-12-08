@@ -7,9 +7,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.DefaultElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.edf.sitecp.bddtests.constants.BddTestsConstants;
 
@@ -30,12 +29,14 @@ public class BasePage {
 	
 	public BasePage(WebDriver webDriver) {
 		this.webDriver = webDriver;
-		this.decorator = new BddTestFieldDecorator(new DefaultElementLocatorFactory(webDriver));
+		this.decorator = new BddTestFieldDecorator(new AjaxElementLocatorFactory(webDriver, 30));
 		PageFactory.initElements(decorator, this);
 	}
 	
 	public void open(String url) {
 		this.pageUrl = url;
 		webDriver.get(url);
+		PageFactory.initElements(decorator, this);
+		
 	}
 }
