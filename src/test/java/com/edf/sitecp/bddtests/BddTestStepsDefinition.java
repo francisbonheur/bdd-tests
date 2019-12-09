@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.edf.sitecp.bddtests.pageobjects.BasePage;
 
+import io.cucumber.java.After;
 import io.cucumber.java.en.When;
 
 public class BddTestStepsDefinition extends BddTestsApplicationTests {
@@ -16,10 +17,17 @@ public class BddTestStepsDefinition extends BddTestsApplicationTests {
 	
 	@Autowired
 	private BasePage currentPage;
+		
+	@After
+	public void tearDown()
+	{
+		currentPage.getWebDriver().quit();
+	}
 
 	@When("^Je suis sur la page (.*)$")
 	public void jeSuisSurLaPage(String url) {
 		currentPage.open(url);
+		assertTrue(currentPage.getWebDriver().getCurrentUrl().replaceAll("/$", "").equals(url));
 	}
 	
 	@When("^La zone (.*) est affichee") 

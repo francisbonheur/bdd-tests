@@ -3,6 +3,7 @@ package com.edf.sitecp.bddtests.pageobjects;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
+import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebElement;
@@ -25,17 +26,19 @@ public class BddTestFieldDecorator extends DefaultFieldDecorator {
 		 
 		 ElementLocator locator = factory.createLocator(field);
 		 
-		 if(WebElement.class.isAssignableFrom(field.getType())) {
-			 return proxyForListLocator(loader, locator);
+		 if (WebElement.class.isAssignableFrom(field.getType())) {
+		     return proxyForLocator(loader, locator);
+		 } else if (List.class.isAssignableFrom(field.getType())) {
+		     return proxyForListLocator(loader, locator);
 		 } else if(Map.class.isAssignableFrom(field.getType())) {
-			 return customProxyForListLocator(loader, locator);
+			 return proxyForMapLocator(loader, locator);
 		 } else {
 			 return null;
 		 }
 	 }
 	 
 	 
-	 protected Map<String,WebElement> customProxyForListLocator(ClassLoader loader, ElementLocator locator) {
+	 protected Map<String,WebElement> proxyForMapLocator(ClassLoader loader, ElementLocator locator) {
 		 InvocationHandler handler = new BddTestsListToMapInvocationHandler(locator);
 		 
 		 Map<String,WebElement> proxy;
