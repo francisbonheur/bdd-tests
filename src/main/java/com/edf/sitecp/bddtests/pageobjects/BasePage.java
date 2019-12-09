@@ -7,8 +7,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.FindBys;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.openqa.selenium.support.pagefactory.FieldDecorator;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.edf.sitecp.bddtests.constants.BddTestsConstants;
 
@@ -24,19 +25,23 @@ public class BasePage {
 	)
 	private Map<String,WebElement> elements; 
 	private String pageUrl;
+	
+	
 	private WebDriver webDriver;
+	
+	private EventFiringWebDriver eventDriver;
+	
 	private FieldDecorator decorator;
 	
-	public BasePage(WebDriver webDriver) {
+	@Autowired
+	public BasePage(WebDriver webDriver, FieldDecorator decorator) {
 		this.webDriver = webDriver;
-		this.decorator = new BddTestFieldDecorator(new AjaxElementLocatorFactory(webDriver, 30));
-		PageFactory.initElements(decorator, this);
+		this.decorator = decorator;
+		eventDriver = new EventFiringWebDriver(webDriver);
 	}
 	
 	public void open(String url) {
 		this.pageUrl = url;
-		webDriver.get(url);
-		PageFactory.initElements(decorator, this);
-		
+		eventDriver.get(url);
 	}
 }

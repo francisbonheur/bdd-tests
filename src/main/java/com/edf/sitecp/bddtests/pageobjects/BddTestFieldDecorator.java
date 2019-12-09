@@ -13,7 +13,7 @@ import org.openqa.selenium.support.pagefactory.ElementLocatorFactory;
 
 public class BddTestFieldDecorator extends DefaultFieldDecorator {
 
-	BddTestFieldDecorator(ElementLocatorFactory factory) {
+	public BddTestFieldDecorator(ElementLocatorFactory factory) {
 		super(factory);
 	}
 	

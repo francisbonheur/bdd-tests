@@ -6,6 +6,8 @@ import java.net.URL;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.pagefactory.AjaxElementLocatorFactory;
+import org.openqa.selenium.support.pagefactory.FieldDecorator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,6 +15,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.edf.sitecp.bddtests.pageobjects.BasePage;
+import com.edf.sitecp.bddtests.pageobjects.BddTestFieldDecorator;
+import com.edf.sitecp.bddtests.pageobjects.BddTestWebDriverEventListener;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -50,9 +54,20 @@ public class BddTestsConfiguration {
 		return new RemoteWebDriver(options);
 		
 	}
+
+	@Bean
+	public FieldDecorator getDecorator(WebDriver webDriver) {
+		return new BddTestFieldDecorator(new AjaxElementLocatorFactory(webDriver, 30));
+	}
+
+	@Bean
+	public BasePage getBasePage(WebDriver webDriver, FieldDecorator decorator) {
+		return new BasePage(webDriver, decorator);
+	}
 	
 	@Bean
-	public BasePage getBasePage() {
-		return new BasePage(getWebDriver());
-	}
+	public BddTestWebDriverEventListener getEventListener(BasePage currentPage) {
+		return new BddTestWebDriverEventListener(currentPage);
+	}	
+
 }
